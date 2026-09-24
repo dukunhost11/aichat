@@ -1,0 +1,1048 @@
+<!--Coding Seru Script by I Putu Darma Putra
+Contact : 6281999425232
+Telegram : t.me/@Codingsseru-->
+
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Informasi Realtime</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary: #42A5F5;
+            --primary-soft: #e3f2fd;
+            --surface: #ffffff;
+            --page: #f3f6fb;
+            --text: #1f2933;
+            --muted: #6b7280;
+            --border: #e8edf3;
+            --danger: #dc2626;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Rubik', sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            background: var(--page);
+            display: flex;
+            justify-content: center;
+        }
+
+        button,
+        input,
+        textarea {
+            font: inherit;
+        }
+
+        button {
+            border: 0;
+            cursor: pointer;
+        }
+
+        [hidden] {
+            display: none !important;
+        }
+
+        .Awal-Seru {
+            width: 100%;
+            max-width: 420px;
+            height: 100vh;
+            overflow-y: auto;
+            background: var(--page);
+        }
+
+        .header-top {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            background: var(--primary);
+            color: #fff;
+            padding: 14px 16px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: 600;
+        }
+
+        .icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.25);
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.18s ease, background 0.18s ease;
+        }
+
+        .icon:active {
+            transform: scale(0.96);
+        }
+
+        .icon:hover {
+            background: rgba(255, 255, 255, 0.32);
+        }
+
+        .header-curve {
+            height: 180px;
+            background: var(--primary);
+            border-bottom-left-radius: 10px;
+            border-bottom-right-radius: 10px;
+            position: relative;
+            overflow: visible;
+        }
+
+        .hero-fector {
+            position: absolute;
+            top: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 220px;
+            max-width: 70%;
+            z-index: 2;
+        }
+
+        .main-content {
+            position: relative;
+            z-index: 5;
+            margin-top: -40px;
+            padding-bottom: 26px;
+        }
+
+        .card,
+        .empty-state {
+            background: var(--surface);
+            margin: 0 14px 14px;
+            border-radius: 10px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+        }
+
+        .card {
+            padding: 15px 14px 14px;
+            position: relative;
+        }
+
+        .new-dot {
+            position: absolute;
+            top: 11px;
+            right: 11px;
+            width: 9px;
+            height: 9px;
+            border-radius: 99px;
+            background: #ef4444;
+            box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.12);
+        }
+
+        .user {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .user-left {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            min-width: 0;
+        }
+
+        .avatar {
+            width: 42px;
+            height: 42px;
+            border-radius: 10px;
+            background: var(--primary-soft);
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            flex: 0 0 auto;
+        }
+
+        .avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .user-meta {
+            min-width: 0;
+        }
+
+        .name {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text);
+            overflow-wrap: anywhere;
+        }
+
+        .badge {
+            display: inline-flex;
+            font-size: 11px;
+            padding: 2px 8px;
+            background: var(--primary-soft);
+            color: var(--primary);
+            border-radius: 10px;
+            margin-left: 6px;
+            vertical-align: 1px;
+        }
+
+        .time {
+            margin-top: 2px;
+            font-size: 12px;
+            color: #888;
+        }
+
+        .tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin: 10px 0;
+        }
+
+        .tag {
+            font-size: 12px;
+            padding: 4px 10px;
+            border-radius: 10px;
+            background: var(--primary-soft);
+            color: var(--primary);
+            overflow-wrap: anywhere;
+        }
+
+        .tag.gray {
+            background: #eef1f5;
+            color: var(--muted);
+        }
+
+        .title {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 6px;
+            overflow-wrap: anywhere;
+        }
+
+        .desc {
+            font-size: 13px;
+            line-height: 1.5;
+            color: #444;
+            white-space: pre-wrap;
+            overflow-wrap: anywhere;
+        }
+
+        .price-table-wrap {
+            width: 100%;
+            margin-top: 8px;
+            overflow-x: auto;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            background: #fff;
+        }
+
+        .price-table {
+            width: 100%;
+            min-width: 360px;
+            border-collapse: collapse;
+        }
+
+        .price-table th,
+        .price-table td {
+            padding: 9px 10px;
+            border-bottom: 1px solid var(--border);
+            text-align: left;
+            font-size: 11px;
+            white-space: nowrap;
+        }
+
+        .price-table th {
+            color: var(--muted);
+            background: #f8fbfd;
+            font-weight: 700;
+        }
+
+        .price-table tr:last-child td {
+            border-bottom: 0;
+        }
+
+        .price-status {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            font-weight: 700;
+        }
+
+        .price-status.up {
+            color: #16a34a;
+        }
+
+        .price-status.down {
+            color: var(--danger);
+        }
+
+        .price-status.same {
+            color: var(--muted);
+        }
+
+        .divider {
+            height: 1px;
+            background: #eee;
+            margin: 12px 0;
+        }
+
+        .footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+            font-size: 12px;
+            color: #666;
+        }
+
+        .actions {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            min-width: 0;
+        }
+
+        .action,
+        .views {
+            display: flex;
+            gap: 6px;
+            align-items: center;
+            color: #666;
+        }
+
+        .action {
+            min-height: 30px;
+            border-radius: 8px;
+            background: transparent;
+            padding: 0 3px;
+            transition: background 0.18s ease, color 0.18s ease, transform 0.18s ease;
+        }
+
+        .action:active {
+            transform: scale(0.96);
+        }
+
+        .action.like-pop {
+            animation: likePop 0.42s ease;
+            background: #fff1f2;
+            color: #e11d48;
+        }
+
+        .action.like-pop i,
+        .action.like-pop span {
+            color: #e11d48;
+        }
+
+        .action i {
+            font-size: 14px;
+            color: #444;
+        }
+
+        .views {
+            color: #777;
+            flex: 0 0 auto;
+        }
+
+        @keyframes likePop {
+            0% {
+                transform: scale(1);
+            }
+
+            45% {
+                transform: scale(1.18);
+            }
+
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        .loading,
+        .empty-state {
+            padding: 18px 14px;
+            color: var(--muted);
+            text-align: center;
+            font-size: 13px;
+            line-height: 1.45;
+        }
+
+        .empty-state i {
+            display: block;
+            font-size: 22px;
+            color: var(--primary);
+            margin-bottom: 8px;
+        }
+
+        /* Compact layout */
+        .Awal-Seru {
+            max-width: 390px;
+        }
+
+        .header-top {
+            padding: 10px 12px;
+            font-size: 14px;
+        }
+
+        .icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 9px;
+            font-size: 13px;
+        }
+
+        .header-curve {
+            height: 136px;
+        }
+
+        .hero-fector {
+            top: -50px;
+            width: 185px;
+        }
+
+        .main-content {
+            margin-top: -30px;
+            padding-bottom: 18px;
+        }
+
+        .card,
+        .empty-state {
+            margin: 0 10px 10px;
+            border-radius: 9px;
+        }
+
+        .card {
+            padding: 11px;
+        }
+
+        .new-dot {
+            top: 8px;
+            right: 8px;
+            width: 7px;
+            height: 7px;
+            box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.12);
+        }
+
+        .user-left {
+            gap: 8px;
+        }
+
+        .avatar {
+            width: 34px;
+            height: 34px;
+            border-radius: 8px;
+            font-size: 13px;
+        }
+
+        .name {
+            font-size: 12.5px;
+        }
+
+        .badge {
+            font-size: 9.5px;
+            padding: 1px 6px;
+            margin-left: 4px;
+        }
+
+        .time {
+            font-size: 10.5px;
+        }
+
+        .tags {
+            gap: 6px;
+            margin: 8px 0;
+        }
+
+        .tag {
+            font-size: 10.5px;
+            padding: 3px 8px;
+            border-radius: 8px;
+        }
+
+        .title {
+            font-size: 14px;
+            margin-bottom: 5px;
+        }
+
+        .desc {
+            font-size: 12px;
+            line-height: 1.45;
+        }
+
+        .price-table {
+            min-width: 330px;
+        }
+
+        .price-table th,
+        .price-table td {
+            padding: 7px 8px;
+            font-size: 10px;
+        }
+
+        .divider {
+            margin: 10px 0;
+        }
+
+        .footer {
+            font-size: 10.5px;
+        }
+
+        .actions {
+            gap: 7px;
+        }
+
+        .action {
+            min-height: 24px;
+            padding: 0 2px;
+        }
+
+        .action i {
+            font-size: 12px;
+        }
+
+        .views {
+            gap: 5px;
+        }
+
+        .loading,
+        .empty-state {
+            padding: 14px 10px;
+            font-size: 12px;
+        }
+
+        .filter-tabs {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 8px;
+            margin: 0 10px 15px;
+            padding: 4px;
+            border-radius: 12px;
+            background: #eef5f7;
+        }
+
+        .filter-tab {
+            min-height: 36px;
+            border-radius: 9px;
+            color: var(--muted);
+            background: transparent;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 7px;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .filter-tab.active {
+            color: var(--primary);
+            background: #fff;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+        }
+
+        @media (max-width: 360px) {
+            .header-top {
+                padding: 9px 10px;
+            }
+
+            .actions {
+                gap: 6px;
+            }
+
+            .filter-tab {
+                font-size: 10.5px;
+                gap: 5px;
+                min-height: 30px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="Awal-Seru">
+        <div class="header-top">
+            <div>Informasi</div>
+        </div>
+
+        <div class="header-curve">
+            <img class="hero-fector"
+                src="https://qoronide.site.je/Negative%20Space%20Logo%20in%20Golden%20Ratio%20Identity%20(2).png"
+                alt="Informasi" />
+        </div>
+
+        <main class="main-content">
+            <div class="filter-tabs" id="filterTabs">
+                <button class="filter-tab active" type="button" data-filter="info">
+                    <i class="fa-regular fa-newspaper"></i> Informasi
+                </button>
+            </div>
+
+            <div id="infoList">
+                <div class="loading">Memuat informasi...</div>
+            </div>
+        </main>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-database-compat.js"></script>
+
+    <script>
+        var firebaseConfig = {
+            apiKey: "AIzaSyCEkkqe0PPQRJuXE5t1Y9yAxizA8BnM3as",
+            authDomain: "data-7ac67.firebaseapp.com",
+            databaseURL: "https://data-7ac67-default-rtdb.firebaseio.com",
+            projectId: "data-7ac67",
+            storageBucket: "data-7ac67.firebasestorage.app",
+            messagingSenderId: "242005671900",
+            appId: "1:242005671900:web:39554f56dc248b6c7c5919"
+        };
+
+        firebase.initializeApp(firebaseConfig);
+
+        var database = firebase.database();
+        var infoRef = database.ref("informasi");
+
+        var infoList = document.getElementById("infoList");
+        var lastItems = [];
+        var viewedInMemory = {};
+        var likeAnimating = {};
+        var NEW_INFO_DURATION = 5 * 60 * 1000;
+        var NEW_INFO_REFRESH_INTERVAL = 1000;
+
+        infoRef.orderByChild("createdAt").on("value", function (snapshot) {
+            var data = snapshot.val();
+            var items = [];
+
+            if (data) {
+                Object.keys(data).forEach(function (key) {
+                    items.push({
+                        id: key,
+                        value: data[key] || {}
+                    });
+                });
+            }
+
+            items.sort(function (a, b) {
+                return getCreatedAt(b.value) - getCreatedAt(a.value);
+            });
+
+            lastItems = items;
+            renderInfo(items);
+        }, function (error) {
+            infoList.innerHTML = '<div class="empty-state"><i class="fa-solid fa-triangle-exclamation"></i>Data tidak bisa dibaca. Cek rules Realtime Database.</div>';
+        });
+
+        setInterval(function () {
+            if (lastItems.length) {
+                renderInfo(lastItems);
+            }
+        }, NEW_INFO_REFRESH_INTERVAL);
+
+        infoList.addEventListener("click", function (event) {
+            var button = event.target.closest("[data-action]");
+
+            if (!button) {
+                return;
+            }
+
+            var id = button.getAttribute("data-id");
+            var action = button.getAttribute("data-action");
+            var fieldMap = {
+                like: "likes",
+                comment: "komentar",
+                smile: "senyum"
+            };
+            var field = fieldMap[action];
+
+            if (!id || !field) {
+                return;
+            }
+
+            if (action === "like") {
+                likeAnimating[id] = Date.now() + 430;
+                renderInfo(lastItems);
+
+                setTimeout(function () {
+                    delete likeAnimating[id];
+
+                    if (lastItems.length) {
+                        renderInfo(lastItems);
+                    }
+                }, 430);
+            }
+
+            database.ref("informasi/" + id + "/" + field).transaction(function (currentValue) {
+                return toNumber(currentValue) + 1;
+            });
+        });
+
+        var filterTabs = document.getElementById("filterTabs");
+        var filterButtons = Array.prototype.slice.call(filterTabs.querySelectorAll("[data-filter]"));
+        var activeFilter = "info";
+
+        filterButtons.forEach(function (button) {
+            button.addEventListener("click", function () {
+                activeFilter = button.getAttribute("data-filter");
+                filterButtons.forEach(function (btn) {
+                    btn.classList.toggle("active", btn.getAttribute("data-filter") === activeFilter);
+                });
+                renderInfo(lastItems);
+            });
+        });
+
+        function renderInfo(items) {
+            var filteredItems = items.filter(function(item) {
+                var isHarga = item.value.tipe === "update_harga" || (item.value.priceRows && item.value.priceRows.length > 0);
+                if (activeFilter === "info") return !isHarga;
+                if (activeFilter === "harga") return isHarga;
+                return true;
+            });
+
+            if (!filteredItems.length) {
+                infoList.innerHTML = '<div class="empty-state"><i class="fa-regular fa-newspaper"></i>Belum ada informasi di sini.</div>';
+                return;
+            }
+
+            infoList.innerHTML = filteredItems.map(function (item) {
+                return createCard(item.id, item.value);
+            }).join("");
+
+            items.forEach(function (item) {
+                markViewed(item.id);
+            });
+        }
+
+        function createCard(id, item) {
+            var nama = pick(item, ["nama", "name", "author"]) || "Mimin";
+            var badge = pick(item, ["badge", "label"]) || "CodingSeru";
+            var judul = pick(item, ["judul", "title"]) || "Tanpa judul";
+            var deskripsi = pick(item, ["deskripsi", "description", "desc"]) || "";
+            var priceRows = normalizePriceRows(pick(item, ["priceRows", "hargaRows", "prices"]));
+            var avatarUrl = safeImageUrl(pick(item, ["avatarUrl", "avatar", "photo"]));
+            var tags = normalizeTags(pick(item, ["tags", "tag"]));
+            var likes = toNumber(pick(item, ["likes", "like", "suka"]));
+            var komentar = toNumber(pick(item, ["komentar", "comments", "comment"]));
+            var senyum = toNumber(pick(item, ["senyum", "smiles", "smile"]));
+            var views = toNumber(pick(item, ["views", "dilihat", "view"]));
+            var newDot = isNewInfo(item) ? '<span class="new-dot" aria-label="Informasi baru"></span>' : "";
+            var likeClass = isLikeAnimating(id) ? "action like-pop" : "action";
+            var avatar = avatarUrl
+                ? '<img src="' + escapeAttribute(avatarUrl) + '" alt="' + escapeAttribute(nama) + '" />'
+                : '<i class="fa-solid fa-store"></i>';
+            var bodyContent = priceRows.length
+                ? renderPriceTable(priceRows)
+                : '<div class="desc">' + escapeHtml(deskripsi) + '</div>';
+
+            return [
+                '<article class="card">',
+                newDot,
+                '    <div class="user">',
+                '        <div class="user-left">',
+                '            <div class="avatar">' + avatar + '</div>',
+                '            <div class="user-meta">',
+                '                <div class="name">' + escapeHtml(nama) + '<span class="badge">' + escapeHtml(badge) + '</span></div>',
+                '                <div class="time">' + timeAgo(getCreatedAt(item)) + '</div>',
+                '            </div>',
+                '        </div>',
+                '    </div>',
+                '    <div class="tags">' + renderTags(tags) + '</div>',
+                '    <div class="title">' + escapeHtml(judul) + '</div>',
+                bodyContent,
+                '    <div class="divider"></div>',
+                '    <div class="footer">',
+                '        <div class="actions">',
+                '            <button class="' + likeClass + '" type="button" data-action="like" data-id="' + escapeAttribute(id) + '" aria-label="Suka"><i class="fa-regular fa-heart"></i><span>' + formatCount(likes) + '</span></button>',
+                '            <button class="action" type="button" data-action="comment" data-id="' + escapeAttribute(id) + '" aria-label="Komentar"><i class="fa-regular fa-comment"></i><span>' + formatCount(komentar) + '</span></button>',
+                '            <button class="action" type="button" data-action="smile" data-id="' + escapeAttribute(id) + '" aria-label="Reaksi senyum"><i class="fa-regular fa-face-smile"></i><span>' + formatCount(senyum) + '</span></button>',
+                '        </div>',
+                '        <div class="views"><i class="fa-regular fa-eye"></i><span>' + formatCount(views) + ' dilihat</span></div>',
+                '    </div>',
+                '</article>'
+            ].join("");
+        }
+
+        function isNewInfo(item) {
+            var createdAt = getCreatedAt(item);
+
+            if (!createdAt) {
+                return false;
+            }
+
+            return Date.now() - createdAt < NEW_INFO_DURATION;
+        }
+
+        function isLikeAnimating(id) {
+            return likeAnimating[id] && likeAnimating[id] > Date.now();
+        }
+
+        function markViewed(id) {
+            var storageKey = "informasi-viewed-" + id;
+
+            if (viewedInMemory[id]) {
+                return;
+            }
+
+            try {
+                if (localStorage.getItem(storageKey)) {
+                    viewedInMemory[id] = true;
+                    return;
+                }
+
+                localStorage.setItem(storageKey, "1");
+            } catch (error) {
+                viewedInMemory[id] = true;
+            }
+
+            viewedInMemory[id] = true;
+            database.ref("informasi/" + id + "/views").transaction(function (currentValue) {
+                return toNumber(currentValue) + 1;
+            });
+        }
+
+        function normalizePriceRows(value) {
+            var rows = value;
+
+            if (rows && !Array.isArray(rows) && typeof rows === "object") {
+                rows = Object.keys(rows).sort(function (a, b) {
+                    return toNumber(a) - toNumber(b);
+                }).map(function (key) {
+                    return rows[key];
+                });
+            }
+
+            if (!Array.isArray(rows)) {
+                return [];
+            }
+
+            return rows.map(function (row) {
+                var oldPrice = toNumber(row.hargaAwal || row.harga_awal || row.oldPrice);
+                var newPrice = toNumber(row.hargaUpdate || row.harga_update || row.newPrice);
+                var status = row.status || "same";
+
+                if (status === "naik") {
+                    status = "up";
+                } else if (status === "turun") {
+                    status = "down";
+                } else if (newPrice > oldPrice) {
+                    status = "up";
+                } else if (newPrice < oldPrice) {
+                    status = "down";
+                }
+
+                return {
+                    namaProduk: cleanText(row.namaProduk || row.nama_produk || row.productName || row.nama),
+                    kodeProduk: cleanText(row.kodeProduk || row.kode_produk || row.productCode || row.kode),
+                    hargaAwal: oldPrice,
+                    hargaUpdate: newPrice,
+                    status: status
+                };
+            }).filter(function (row) {
+                return row.namaProduk && row.kodeProduk && row.hargaAwal > 0 && row.hargaUpdate > 0;
+            });
+        }
+
+        function renderPriceTable(rows) {
+            return [
+                '<div class="price-table-wrap">',
+                '    <table class="price-table">',
+                '        <thead>',
+                '            <tr>',
+                '                <th>Produk</th>',
+                '                <th>Kode</th>',
+                '                <th>Harga Awal</th>',
+                '                <th>Harga Update</th>',
+                '                <th>Status</th>',
+                '            </tr>',
+                '        </thead>',
+                '        <tbody>',
+                rows.map(function (row) {
+                    return [
+                        '            <tr>',
+                        '                <td>' + escapeHtml(row.namaProduk) + '</td>',
+                        '                <td>' + escapeHtml(row.kodeProduk) + '</td>',
+                        '                <td>' + escapeHtml(formatRupiah(row.hargaAwal)) + '</td>',
+                        '                <td>' + escapeHtml(formatRupiah(row.hargaUpdate)) + '</td>',
+                        '                <td>' + renderPriceStatus(row.status) + '</td>',
+                        '            </tr>'
+                    ].join("");
+                }).join(""),
+                '        </tbody>',
+                '    </table>',
+                '</div>'
+            ].join("");
+        }
+
+        function renderPriceStatus(status) {
+            if (status === "up") {
+                return '<span class="price-status up"><i class="fa-solid fa-arrow-trend-up"></i>Naik</span>';
+            }
+
+            if (status === "down") {
+                return '<span class="price-status down"><i class="fa-solid fa-arrow-trend-down"></i>Turun</span>';
+            }
+
+            return '<span class="price-status same"><i class="fa-solid fa-minus"></i>Tetap</span>';
+        }
+
+        function renderTags(tags) {
+            if (!tags.length) {
+                return '<span class="tag">#informasi</span>';
+            }
+
+            return tags.map(function (tag, index) {
+                var cleanTag = String(tag).replace(/^#/, "").trim();
+                var className = index === 0 ? "tag" : "tag gray";
+
+                return '<span class="' + className + '">#' + escapeHtml(cleanTag) + '</span>';
+            }).join("");
+        }
+
+        function normalizeTags(value) {
+            if (Array.isArray(value)) {
+                return value.map(cleanText).filter(Boolean);
+            }
+
+            if (value && typeof value === "object") {
+                return Object.keys(value).map(function (key) {
+                    return cleanText(value[key]);
+                }).filter(Boolean);
+            }
+
+            return parseTags(value || "");
+        }
+
+        function parseTags(value) {
+            return String(value || "")
+                .split(",")
+                .map(cleanText)
+                .map(function (tag) {
+                    return tag.replace(/^#/, "");
+                })
+                .filter(Boolean);
+        }
+
+        function pick(source, keys) {
+            for (var index = 0; index < keys.length; index += 1) {
+                var value = source[keys[index]];
+
+                if (value !== undefined && value !== null && value !== "") {
+                    return value;
+                }
+            }
+
+            return "";
+        }
+
+        function getCreatedAt(item) {
+            var rawValue = pick(item, ["createdAt", "created_at", "waktu", "tanggal"]);
+            var numberValue = toNumber(rawValue);
+
+            if (numberValue) {
+                return numberValue;
+            }
+
+            var parsedDate = Date.parse(rawValue);
+            return Number.isFinite(parsedDate) ? parsedDate : 0;
+        }
+
+        function timeAgo(timestamp) {
+            if (!timestamp) {
+                return "baru saja";
+            }
+
+            var diff = Math.max(0, Date.now() - timestamp);
+            var minute = 60 * 1000;
+            var hour = 60 * minute;
+            var day = 24 * hour;
+            var seconds = Math.floor(diff / 1000);
+
+            if (diff < minute) {
+                return Math.max(1, seconds) + " detik yang lalu";
+            }
+
+            if (diff < hour) {
+                var minutes = Math.floor(diff / minute);
+                var remainingSeconds = Math.floor((diff % minute) / 1000);
+
+                return minutes + " menit " + remainingSeconds + " detik yang lalu";
+            }
+
+            if (diff < day) {
+                var hours = Math.floor(diff / hour);
+                var remainingMinutes = Math.floor((diff % hour) / minute);
+
+                return hours + " jam " + remainingMinutes + " menit yang lalu";
+            }
+
+            var days = Math.floor(diff / day);
+            var remainingHours = Math.floor((diff % day) / hour);
+
+            return days + " hari " + remainingHours + " jam yang lalu";
+        }
+
+        function formatCount(value) {
+            var number = toNumber(value);
+
+            if (number >= 1000000) {
+                return (number / 1000000).toFixed(number >= 10000000 ? 0 : 1).replace(".0", "") + "m";
+            }
+
+            if (number >= 1000) {
+                return (number / 1000).toFixed(number >= 10000 ? 0 : 1).replace(".0", "") + "k";
+            }
+
+            return String(number);
+        }
+
+        function formatRupiah(value) {
+            return new Intl.NumberFormat("id-ID", {
+                style: "currency",
+                currency: "IDR",
+                maximumFractionDigits: 0
+            }).format(toNumber(value));
+        }
+
+        function toNumber(value) {
+            var number = Number(value);
+            return Number.isFinite(number) ? number : 0;
+        }
+
+        function cleanText(value) {
+            return String(value || "").trim();
+        }
+
+        function safeImageUrl(value) {
+            var url = cleanText(value);
+            return /^https?:\/\//i.test(url) ? url : "";
+        }
+
+        function escapeHtml(value) {
+            return String(value)
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
+        }
+
+        function escapeAttribute(value) {
+            return escapeHtml(value).replace(/`/g, "&#096;");
+        }
+    </script>
+</body>
+
+</html>
